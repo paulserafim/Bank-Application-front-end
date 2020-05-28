@@ -10,6 +10,11 @@ export class TransactionList extends LitElement {
         font-family: "Gill Sans", sans-serif;
         border-radius: 0.5rem;
       }
+
+      tbody > tr:hover {
+        background-color: rgb(224, 222, 222);
+        border-radius: 0.5rem;
+      }
     `;
   }
 

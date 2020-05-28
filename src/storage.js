@@ -1,6 +1,8 @@
 export function read(property) {
   const json = window.localStorage.getItem(property);
-  if (json !== null) return JSON.parse(json);
+  if (json !== "undefined") {
+    return JSON.parse(json);
+  }
   //return json === null ? [] : JSON.parse(json);
 }
 
@@ -41,4 +43,8 @@ export function removeCredentials() {
 
 export function removeAll() {
   window.localStorage.clear();
+}
+
+export function removeItem(property) {
+  window.localStorage.removeItem(property);
 }

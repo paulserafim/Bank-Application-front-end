@@ -1,5 +1,5 @@
 import { LitElement, html, css } from "lit-element";
-import { read, appendToStorage, removeAll, write } from "./storage";
+import { read, removeItem, removeAll, write } from "./storage";
 import "./ClientInfo";
 import "./TransactionList";
 import "./Transaction";
@@ -98,11 +98,17 @@ export class BankApp extends LitElement {
     this.firstName = read("firstName");
     this.lastName = read("lastName");
     this.transactionList = read("transactionList");
-    this.latitude = read("latitude");
-    this.address = read("address");
-    this.longitude = read("longitude");
-    this.lastTimeLoginDate = read("lastTimeLoginDate");
-    this.lastLocationLogin = read("lastLocationLogin");
+    if (read("geoposition") != null) {
+      this.latitude = read("geoposition").latitude;
+      this.address = read("geoposition").address;
+      this.longitude = read("geoposition").longitude;
+    }
+    if (read("lastTimeLoginDate") != null) {
+      this.lastTimeLoginDate = read("lastTimeLoginDate");
+    }
+    if (read("lastLocationLogin") != null) {
+      this.lastLocationLogin = read("lastLocationLogin");
+    }
     this.sessionId = read("sessionId");
   }
 
@@ -128,6 +134,7 @@ export class BankApp extends LitElement {
 
     function error(err) {
       console.warn(`ERROR(${err.code}): ${err.message}`);
+      removeItem("geoposition");
     }
 
     navigator.geolocation.getCurrentPosition(success, error, options);
@@ -203,6 +210,10 @@ export class BankApp extends LitElement {
       this.latitude = read("geoposition").latitude;
       this.longitude = read("geoposition").longitude;
       this.address = read("geoposition").address;
+    } else {
+      this.latitude = null;
+      this.longitude = null;
+      this.address = null;
     }
 
     postData("http://localhost:8080/credentials", {
